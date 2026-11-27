@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "nom2s",
+  "version": "${version}",
+  "name": "nom2s",
+  "description": "Removes executable TrueType hinting bytecode from resource-pack fonts before a native font engine can run it.",
+  "authors": [
+    "nom2s contributors"
+  ],
+  "license": "Unlicense",
+  "environment": "client",
+  "mixins": [
+    "nom2s.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=1.14",
+    "fabricloader": ">=0.14.0"
+  }
+}

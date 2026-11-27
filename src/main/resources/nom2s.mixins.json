@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "dev.nom2s.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "plugin": "dev.nom2s.mixin.Nom2sMixinPlugin",
+  "client": [
+    "FreeTypeGuardMixin",
+    "StbTrueType2GuardMixin",
+    "StbTrueType3GuardMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+}
+
+group = 'dev.nom2s'
+version = '1.0.0'
+
+base {
+    archivesName = 'nom2s'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://maven.fabricmc.net/'
+    }
+}
+
+dependencies {
+    compileOnly 'net.fabricmc:sponge-mixin:0.11.3+mixin.0.8.5'
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 8
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+jar {
+    from('LICENSE')
+}
