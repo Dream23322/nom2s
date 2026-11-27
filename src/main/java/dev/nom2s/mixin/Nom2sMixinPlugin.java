@@ -1,6 +1,5 @@
 package dev.nom2s.mixin;
 
-import java.lang.reflect.Method;
 import java.util.Set;
 
 import org.objectweb.asm.tree.ClassNode;
@@ -25,9 +24,9 @@ public final class Nom2sMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        freeTypeAvailable = hasMethod(FREE_TYPE, "FT_New_Memory_Face", 4);
-        stbTwoAvailable = hasMethod(STB_TRUE_TYPE, "stbtt_InitFont", 2);
-        stbThreeAvailable = hasMethod(STB_TRUE_TYPE, "stbtt_InitFont", 3);
+        freeTypeAvailable = hasClassResource(FREE_TYPE);
+        stbTwoAvailable = hasClassResource(STB_TRUE_TYPE);
+        stbThreeAvailable = stbTwoAvailable;
 
         if (!freeTypeAvailable && !stbTwoAvailable && !stbThreeAvailable) {
             throw new IllegalStateException(
@@ -91,32 +90,19 @@ public final class Nom2sMixinPlugin implements IMixinConfigPlugin {
         return "STB";
     }
 
-    private static boolean hasMethod(String className, String methodName, int parameterCount) {
+    private static boolean hasClassResource(String className) {
+        String resource = className.replace('.', '/') + ".class";
         ClassLoader[] loaders = new ClassLoader[]{
                 Nom2sMixinPlugin.class.getClassLoader(),
                 Thread.currentThread().getContextClassLoader()
         };
 
         for (ClassLoader loader : loaders) {
-            if (loader == null) {
-                continue;
-            }
-            try {
-                Class<?> type = Class.forName(className, false, loader);
-                for (Method method : type.getMethods()) {
-                    if (methodName.equals(method.getName())
-                            && method.getParameterCount() == parameterCount) {
-                        return true;
-                    }
-                }
-            } catch (ClassNotFoundException ignored) {
-                // Try the next loader.
-            } catch (LinkageError ignored) {
-                // Try the next loader.
-            } catch (SecurityException ignored) {
-                // Try the next loader.
+            if (loader != null && loader.getResource(resource) != null) {
+                return true;
             }
         }
         return false;
     }
 }
+
